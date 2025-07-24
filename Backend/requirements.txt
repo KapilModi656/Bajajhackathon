@@ -18,3 +18,7 @@ python-multipart
 pypdf
 Unstructured
 unstructured[pdf]
+langchain-unstructured
+unstructured[docx]
+unstructured[csv]
+unstructured[docs]

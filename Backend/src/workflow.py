@@ -52,7 +52,7 @@ Answer: Yes, Brain surgery is covered under the policy for residents of Mumbai w
 Example 2:
 Query: Age=30F, Injury=heart transplant, Location=Mumbai, Policy Duration=1-year
 Answer: The policy does not cover heart transplant procedures.
-
+Be strict to the instructions and do not deviate from the format.
 Context:
 {context}
 """),
