@@ -12,3 +12,6 @@ groq
 streamlit
 streamlit-chat
 faiss-cpu
+fastapi 
+uvicorn 
+python-multipart
