@@ -16,3 +16,5 @@ fastapi
 uvicorn 
 python-multipart
 pypdf
+Unstructured
+unstructured[pdf]

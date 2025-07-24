@@ -1,9 +1,10 @@
 from langchain.text_splitter import RecursiveCharacterTextSplitter, CharacterTextSplitter
 from langchain_community.vectorstores import FAISS
-from langchain_community.document_loaders import PyPDFLoader
+from langchain_community.document_loaders import UnstructuredFileLoader,PyPDFLoader
 from langchain_huggingface import HuggingFaceEmbeddings
 import tempfile
 import os
+
 
 async def save_uploaded_file(file):
 
@@ -19,13 +20,15 @@ async def save_uploaded_file(file):
 
 
 def getRetreiver(path):
-    loader=PyPDFLoader(path)
-    doc=loader.load()
-    doc=RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100).split_documents(doc)
-    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
-    store=FAISS.from_documents(documents=doc, embedding=embeddings)
-    return store.as_retriever(search_type="similarity", search_kwargs={"k": 7})
+    loader = PyPDFLoader(file_path=path)
+    raw_docs = loader.load()  
+    splitter = RecursiveCharacterTextSplitter(chunk_size=500, chunk_overlap=100)
+    split_docs = splitter.split_documents(raw_docs)
 
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
+    vector_store = FAISS.from_documents(documents=split_docs, embedding=embeddings)
+
+    return vector_store.as_retriever(search_type="similarity", search_kwargs={"k": 7})
 def query_split(query):
     qu=query.split(",")
     return qu

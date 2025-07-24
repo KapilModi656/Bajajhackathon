@@ -9,6 +9,7 @@ async def root(query: str = Form(...), file: UploadFile = File(...)):
     try:
         print("Recieved query:", query)
         response = await get_Response(query, file)
+        print(file.filename, "processed successfully")
         return {"response": response}
     except Exception as e:
         return JSONResponse(status_code=500, content={"message": str(e)})
