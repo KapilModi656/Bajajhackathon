@@ -1,0 +1,14 @@
+langchain
+langchain-groq
+langchain-community
+langchain-groq
+langgraph
+langchain_tools
+langchain_text_splitters
+langchain-huggingface
+sentence-transformers
+transformers
+groq
+streamlit
+streamlit-chat
+faiss-cpu
