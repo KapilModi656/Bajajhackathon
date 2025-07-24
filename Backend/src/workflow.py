@@ -2,21 +2,23 @@ from langchain_groq import ChatGroq
 from langchain_core.output_parsers.string import StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
 from langchain.chains.combine_documents import create_stuff_documents_chain
-from utils import (save_uploaded_file,getRetreiver,query_split)
+from ..utils import (save_uploaded_file,getRetreiver,query_split)
 import os
 from dotenv import load_dotenv
 import time
-from exception import CustomException
-from logging import logger
+from Backend.exception import CustomException
+import Backend.custom_logging as custom_logging
+logger = custom_logging.logging.getLogger()
 load_dotenv()
 import sys
-
-llm=ChatGroq(model="gemma2-9b-it",api_key=os.getenv("GROQ_API_KEY"))
-def get_Response(query,document):
+os.environ["GROQ_API_KEY"] = os.getenv("GROQ_API_KEY")
+os.environ["HUGGING_FACE_API_KEY"] = os.getenv("HUGGING_FACE_API_KEY")
+llm = ChatGroq(model="gemma2-9b-it", api_key=os.getenv("GROQ_API_KEY"))
+async def get_Response(query, document):
     try:
         logger.info("Starting the response generation process")
         start = time.process_time()
-        retreiver=getRetreiver(save_uploaded_file(document))
+        retreiver=getRetreiver(await save_uploaded_file(document))
         logger.info("Retrieving relevant documents for the query")
         que=query_split(query)
         docs=[]
@@ -45,7 +47,7 @@ def get_Response(query,document):
             query_formation=query
         logger.info("Creating document chain for processing the query")
         doc_chain=create_stuff_documents_chain(llm,prompt)
-        raw=doc_chain.invoke({"query":query_formation,"Context":docs})
+        raw=doc_chain.invoke({"query":query_formation,"context":docs})
         logger.info("Processing the response from the model")
         response = StrOutputParser().invoke(raw)
 

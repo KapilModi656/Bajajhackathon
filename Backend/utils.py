@@ -2,18 +2,18 @@ from langchain.text_splitter import RecursiveCharacterTextSplitter, CharacterTex
 from langchain_community.vectorstores import FAISS
 from langchain_community.document_loaders import PyPDFLoader
 from langchain_huggingface import HuggingFaceEmbeddings
-import sentence_transformers
 import tempfile
 import os
 
-def save_uploaded_file(file):
+async def save_uploaded_file(file):
 
     temp_dir = tempfile.gettempdir()
-    file_path = os.path.join(temp_dir, file.name)
+    file_path = os.path.join(temp_dir, file.filename)
 
-    # Save the file content
+    content = await file.read()
+
     with open(file_path, "wb") as f:
-        f.write(file.read())
+        f.write(content)
 
     return file_path
 
